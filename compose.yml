@@ -1,0 +1,98 @@
+services:
+
+  postgres:
+    image: postgres:18
+    container_name: software-estimator-postgres
+
+    environment:
+      POSTGRES_DB: estimator_db
+      POSTGRES_USER: estimator_user
+      POSTGRES_PASSWORD: estimator_password
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+
+  redis:
+    image: redis:7
+    container_name: software-estimator-redis
+
+    ports:
+      - "6379:6379"
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "redis-cli",
+          "ping"
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+
+  backend:
+    build:
+      context: ./backend
+
+    container_name: software-estimator-backend
+
+    environment:
+      DATABASE_URL: postgresql+psycopg://estimator_user:estimator_password@postgres:5432/estimator_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      SECRET_KEY: ${SECRET_KEY}
+
+    ports:
+      - "8000:8000"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+
+  worker:
+    build:
+      context: ./backend
+
+    container_name: software-estimator-worker
+
+    command:
+      - celery
+      - -A
+      - workers.celery_app.celery_app
+      - worker
+      - --loglevel=INFO
+
+    environment:
+      DATABASE_URL: postgresql+psycopg://estimator_user:estimator_password@postgres:5432/estimator_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+
+volumes:
+  postgres_data:

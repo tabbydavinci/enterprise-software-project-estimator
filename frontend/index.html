@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Software Estimator</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+```
+
+</head>
+
+<body>
+
+```
+<main class="container">
+
+    <!-- Authentication -->
+    <section id="authCard" class="card">
+
+        <div class="header">
+            <h1>Software Estimator</h1>
+
+            <p class="subtitle">
+                Sign in to manage your projects and estimates.
+            </p>
+        </div>
+
+        <form id="authForm">
+
+            <label for="authEmail">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="authEmail"
+                placeholder="you@example.com"
+                required
+            >
+
+            <label for="authPassword">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="authPassword"
+                placeholder="Password"
+                required
+            >
+
+            <div class="auth-actions">
+
+                <button
+                    type="submit"
+                    id="loginButton"
+                >
+                    Sign In
+                </button>
+
+                <button
+                    type="button"
+                    id="registerButton"
+                    class="secondary-button"
+                >
+                    Create Account
+                </button>
+
+            </div>
+
+        </form>
+
+        <p
+            id="authStatus"
+            class="status"
+            aria-live="polite"
+        ></p>
+
+    </section>
+
+
+    <!-- Authenticated application -->
+    <section
+        id="appCard"
+        class="card hidden"
+    >
+
+        <!-- Top navigation -->
+        <div class="top-bar">
+
+            <span id="userEmail"></span>
+
+            <div class="top-actions">
+
+                <button
+                    type="button"
+                    id="dashboardButton"
+                    class="secondary-button nav-button"
+                >
+                    Dashboard
+                </button>
+
+                <button
+                    type="button"
+                    id="newEstimationButton"
+                    class="nav-button"
+                >
+                    New Estimation
+                </button>
+
+                <button
+                    type="button"
+                    id="logoutButton"
+                    class="secondary-button logout-button"
+                >
+                    Log Out
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- Dashboard -->
+        <section id="dashboardView">
+
+            <div class="view-header">
+
+                <div>
+                    <h2>Dashboard</h2>
+
+                    <p class="subtitle">
+                        Your projects and estimation history.
+                    </p>
+                </div>
+
+            </div>
+
+            <p
+                id="dashboardStatus"
+                class="status"
+                aria-live="polite"
+            ></p>
+
+            <div id="projectList"></div>
+
+        </section>
+
+
+        <!-- Estimator -->
+        <section
+            id="estimatorView"
+            class="hidden"
+        >
+
+            <div class="header">
+
+                <h1>Software Estimator</h1>
+
+                <p class="subtitle">
+                    Estimate software development effort, time, and cost.
+                </p>
+
+            </div>
+
+
+            <form id="estimationForm">
+
+                <!-- Project -->
+                <section class="form-section">
+
+                    <h2>Project</h2>
+
+                    <label for="projectSelect">
+                        Project
+                    </label>
+
+                    <select id="projectSelect">
+                        <option value="new">
+                            Create a new project
+                        </option>
+                    </select>
+
+
+                    <div id="newProjectFields">
+
+                        <label for="projectName">
+                            Project name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="projectName"
+                            name="projectName"
+                            placeholder="e.g. E-commerce Platform"
+                            required
+                        >
+
+                        <label for="projectDescription">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="projectDescription"
+                            name="projectDescription"
+                            placeholder="Describe the project..."
+                            rows="4"
+                        ></textarea>
+
+                    </div>
+
+                </section>
+
+
+                <!-- Function Points -->
+                <section class="form-section">
+
+                    <h2>Function Points</h2>
+
+
+                    <!-- Inputs -->
+                    <div class="entity-card">
+
+                        <h3>Inputs</h3>
+
+                        <label for="inputsCount">
+                            Number of inputs
+                        </label>
+
+                        <input
+                            type="number"
+                            id="inputsCount"
+                            min="1"
+                            value="1"
+                            required
+                        >
+
+                        <div id="inputsComplexities"></div>
+
+                    </div>
+
+
+                    <!-- Outputs -->
+                    <div class="entity-card">
+
+                        <h3>Outputs</h3>
+
+                        <label for="outputsCount">
+                            Number of outputs
+                        </label>
+
+                        <input
+                            type="number"
+                            id="outputsCount"
+                            min="1"
+                            value="1"
+                            required
+                        >
+
+                        <div id="outputsComplexities"></div>
+
+                    </div>
+
+
+                    <!-- Inquiries -->
+                    <div class="entity-card">
+
+                        <h3>Inquiries</h3>
+
+                        <label for="inquiriesCount">
+                            Number of inquiries
+                        </label>
+
+                        <input
+                            type="number"
+                            id="inquiriesCount"
+                            min="1"
+                            value="1"
+                            required
+                        >
+
+                        <div id="inquiriesComplexities"></div>
+
+                    </div>
+
+
+                    <!-- Files -->
+                    <div class="entity-card">
+
+                        <h3>Files</h3>
+
+                        <label for="filesCount">
+                            Number of files
+                        </label>
+
+                        <input
+                            type="number"
+                            id="filesCount"
+                            min="1"
+                            value="1"
+                            required
+                        >
+
+                        <div id="filesComplexities"></div>
+
+                    </div>
+
+
+                    <!-- Interfaces -->
+                    <div class="entity-card">
+
+                        <h3>Interfaces</h3>
+
+                        <label for="interfacesCount">
+                            Number of interfaces
+                        </label>
+
+                        <input
+                            type="number"
+                            id="interfacesCount"
+                            min="1"
+                            value="1"
+                            required
+                        >
+
+                        <div id="interfacesComplexities"></div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- Project Configuration -->
+                <section class="form-section">
+
+                    <h2>Project Configuration</h2>
+
+
+                    <label for="environmentComplexity">
+                        Environment complexity
+                    </label>
+
+                    <input
+                        type="number"
+                        id="environmentComplexity"
+                        min="0"
+                        value="15"
+                        required
+                    >
+
+
+                    <label for="projectMode">
+                        Project mode
+                    </label>
+
+                    <select
+                        id="projectMode"
+                        required
+                    >
+                        <option value="organic">
+                            Organic
+                        </option>
+
+                        <option value="semi-detached">
+                            Semi-detached
+                        </option>
+
+                        <option value="embedded">
+                            Embedded
+                        </option>
+                    </select>
+
+
+                    <label for="language">
+                        Programming language
+                    </label>
+
+                    <select
+                        id="language"
+                        required
+                    >
+                        <option value="python">
+                            Python
+                        </option>
+
+                        <option value="java">
+                            Java
+                        </option>
+
+                        <option value="c++">
+                            C++
+                        </option>
+
+                        <option value="c#">
+                            C#
+                        </option>
+
+                        <option value="javascript">
+                            JavaScript
+                        </option>
+
+                        <option value="typescript">
+                            TypeScript
+                        </option>
+
+                        <option value="ruby">
+                            Ruby
+                        </option>
+
+                        <option value="c">
+                            C
+                        </option>
+
+                        <option value="sql">
+                            SQL
+                        </option>
+
+                        <option value="cobol">
+                            COBOL
+                        </option>
+
+                        <option value="fortran">
+                            Fortran
+                        </option>
+
+                        <option value="assembly language">
+                            Assembly Language
+                        </option>
+                    </select>
+
+
+                    <label for="salary">
+                        Salary per month (₹)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="salary"
+                        min="1"
+                        value="100000"
+                        required
+                    >
+
+
+                    <label for="teamSize">
+                        Team size
+                    </label>
+
+                    <input
+                        type="number"
+                        id="teamSize"
+                        min="1"
+                        value="5"
+                        required
+                    >
+
+                </section>
+
+
+                <button
+                    type="submit"
+                    id="estimateButton"
+                >
+                    Estimate Project
+                </button>
+
+            </form>
+
+
+            <!-- Estimation status -->
+            <div
+                id="status"
+                class="status"
+                aria-live="polite"
+            ></div>
+
+
+            <!-- Estimation results -->
+            <section
+                id="results"
+                class="results hidden"
+            >
+
+                <h2>Estimation Result</h2>
+
+                <div class="result-grid">
+
+                    <div class="result-item">
+                        <span>UFP</span>
+                        <strong id="resultUfp">—</strong>
+                    </div>
+
+                    <div class="result-item">
+                        <span>TCF</span>
+                        <strong id="resultTcf">—</strong>
+                    </div>
+
+                    <div class="result-item">
+                        <span>Function Points</span>
+                        <strong id="resultFp">—</strong>
+                    </div>
+
+                    <div class="result-item">
+                        <span>Effort</span>
+                        <strong id="resultEffort">—</strong>
+                    </div>
+
+                    <div class="result-item">
+                        <span>Development Time</span>
+                        <strong id="resultTime">—</strong>
+                    </div>
+
+                    <div class="result-item">
+                        <span>Cost</span>
+                        <strong id="resultCost">—</strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </section>
+
+</main>
+
+
+<script src="app.js"></script>
+```
+
+</body>
+</html>
